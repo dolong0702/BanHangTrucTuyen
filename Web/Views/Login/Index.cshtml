@@ -1,0 +1,75 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="main-container container">
+    <ul class="breadcrumb">
+        <li><a href="/"><i class="fa fa-home"></i></a></li>
+        <li><a href="#">Đăng nhập</a></li>
+    </ul>
+
+    <div class="row">
+        <div id="content" class="col-sm-12">
+            <div class="page-login">
+
+                <div class="account-border">
+                    <div class="row">
+                        <div class="col-sm-6 new-customer">
+                            <div class="well">
+                                <h2><i class="fa fa-file-o" aria-hidden="true"></i> Khách hàng mới</h2>
+                                <p>Trở thành khách hàng của chúng tôi, bạn sẽ có nhiều quyền lợi.</p>
+                            </div>
+                            <div class="bottom-form">
+                                <a href="#" class="btn btn-default pull-right">Đăng kí</a>
+                            </div>
+                        </div>
+
+                        <form action="#" method="post" enctype="multipart/form-data">
+                            <div class="col-sm-6 customer-login">
+                                <div class="well">
+                                    <p><strong>Tôi đã có tài khoản</strong></p>
+                                    <div class="form-group">
+                                        <label class="control-label " for="input-account">Tên đăng nhập</label>
+                                        <input type="text" name="email" value="" id="input-account" class="form-control" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label " for="input-password">Password</label>
+                                        <input type="password" name="password" value="" id="input-password" class="form-control" />
+                                    </div>
+                                    <div class="form-group">
+                                        <button type="button" class="btn btn-primary px-4" onclick="login('@Request.RawUrl')">Đăng nhập</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function login(url) {
+        var ten = $('#input-account').val();
+        var pas = $('#input-password').val();
+        $.ajax({
+            url: "/Login/Login",
+            type: "POST",
+            data: {
+                tendangnhap: ten,
+                password: pas,
+                ReturnUrl: url
+            },
+            dataType: "json",
+            success: function (data) {
+                window.location.href = data;
+            }
+        });
+        
+    }
+</script>
+
+

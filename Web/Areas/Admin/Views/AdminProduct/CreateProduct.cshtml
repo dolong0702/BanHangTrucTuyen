@@ -1,0 +1,128 @@
+﻿@using Web.Models
+
+@{
+    var _db = new Model1();
+    var category = _db.Danhmucs.ToList();
+    ViewBag.Title = "CreateProduct";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<main class="page-content">
+    <!--breadcrumb-->
+    <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
+        <div class="ps-3">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0 p-0">
+                    <li class="breadcrumb-item">
+                        <a href="javascript:;"><i class="bx bx-home-alt"></i></a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">Thêm sản phẩm</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+    <!--end breadcrumb-->
+
+    <div class="row">
+        <div class="col-lg-12 mx-auto">
+            <div class="card">
+                <div class="card-header py-3 bg-transparent">
+                    <div class="d-sm-flex align-items-center">
+                        <h5 class="mb-2 mb-sm-0">Thông tin</h5>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-12 col-lg-8">
+                            <div class="card shadow-none bg-light border">
+                                <div class="card-body">
+                                    <form class="row g-3">
+                                        <div class="col-12">
+                                            <label class="form-label">Tên sản phẩm</label>
+                                            <input type="text" class="form-control" placeholder="VD: Tivi, tủ lạnh,..." id="tenSP">
+                                        </div>
+                                        <div class="col-12">
+                                            <label class="form-label">Hãng</label>
+                                            <input type="text" class="form-control" placeholder="VD: apple, samsung,..." id="hang">
+                                        </div>
+                                        <div class="col-12">
+                                            <label class="form-label">Màu sắc</label>
+                                            <input type="text" class="form-control" placeholder="Color" id="mausac">
+                                        </div>
+                                        <div class="col-12">
+                                            <label class="form-label">Hình ảnh</label>
+                                            <input class="form-control" type="file" placeholder="Đường dẫn tới ảnh" id="hinhanh">
+                                        </div>
+                                        <div class="col-12">
+                                            <label class="form-label">Mô tả</label>
+                                            <textarea class="form-control" placeholder="......" rows="4" cols="4" id="mota"></textarea>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-lg-4">
+                            <div class="card shadow-none bg-light border">
+                                <div class="card-body">
+                                    <div class="row g-3">
+                                        <div class="col-12">
+                                            <label class="form-label">Giá</label>
+                                            <input type="text" class="form-control" placeholder="VD: 10000VNĐ" id="gia">
+                                        </div>
+                                        <div class="col-12">
+                                            <label class="form-label">Tráng thái</label>
+                                            <select class="form-select" id="tenTT">
+                                                <option>Còn hàng</option>
+                                                <option>Hết hàng</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-12">
+                                            <label class="form-label">Danh mục</label>
+                                            <select class="form-select" id="tenDM">
+                                                @foreach(var it in category)
+                                                    {
+                                                        <option>@it.TenDM</option>
+                                                        <option hidden="hidden" id="maDM">@it.MaDM</option>
+                                                    }
+                                            </select>
+                                        </div>
+                                    </div><!--end row-->
+                                </div>
+                            </div>
+                        </div>
+                    </div><!--end row-->
+                    <div class="ms-auto">
+                        <button type="button" class="btn btn-primary" onclick="AddProduct('@Request.RawUrl')">Thêm sản phẩm</button>
+                        <button type="button" class="btn btn-primary">Quay lại</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div><!--end row-->
+
+</main>
+<script>
+    function AddProduct(url)
+    {
+        var ten = $('#tenSP').val();
+        var mota = $('#mota').val();
+        var tthai = $('#tenTT').val();
+        var danhmuc = $('#maDM').val();
+        $.ajax({
+            url: "/AdminProduct/AddProduct",
+            type: "POST",
+            data: {
+                ten: ten,
+                mota: mota,
+                trangthai: tthai,
+                madm: danhmuc,
+                returnUrl: url
+            },
+            dataType: "json",
+        })
+        window.location.reload();
+    }
+</script>
+

@@ -1,0 +1,113 @@
+﻿
+@{
+    ViewBag.Title = "FornthemKH";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+
+<main class="page-content">
+    <!--breadcrumb-->
+    <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
+        <div class="ps-3">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0 p-0">
+                    <li class="breadcrumb-item">
+                        <a href="javascript:;"><i class="bx bx-home-alt"></i></a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">Thêm khách hàng</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+    <!--end breadcrumb-->
+
+
+    <div class="row">
+        <div class="col-12 col-lg-8">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <hr>
+                    <div class="card shadow-none border">
+                        <div class="card-header">
+                            <h6 class="mb-0">Thông tin chi tiết</h6>
+                        </div>
+                        <div class="card-body">
+                            <form class="row g-3">
+                                <div class="col-12">
+                                    <label class="form-label">Tên khách hàng</label>
+                                    <input type="text" id="ten" class="form-control" >
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label">Ngày sinh</label>
+                                    <input type="text" id="ngaysinh" class="form-control">
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label">Số CMT/CCCD</label>
+                                    <input type="text" id="cancuoc" class="form-control" >
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label">Số điện thoại</label>
+                                    <input type="text" id="sodienthoai" class="form-control">
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label">Mật khẩu</label>
+                                    <input type="text" id="matkhau" class="form-control">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="card shadow-none border">
+                        <div class="card-header">
+                            <h6 class="mb-0">Thông tin liên hệ</h6>
+                        </div>
+                        <div class="card-body">
+                            <form class="row g-3">
+                                <div class="col-12">
+                                    <label class="form-label">Địa chỉ</label>
+                                    <input type="text" id="diachi" class="form-control">
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label">Gmail</label>
+                                    <input type="text" class="form-control" value="Chưa thêm cột trong csdl">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="text-start">
+                        <button type="button" class="btn btn-primary px-4" onclick="AddKhachHang('@Request.RawUrl')">Lưu thay đổi</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!--end row-->
+
+</main>
+<script>
+    function AddKhachHang(url) {
+        var ten = $('#ten').val();
+        var ngaysinh = $('#ngaysinh').val();
+        var cancuoc = $('#cancuoc').val();
+        var sdt = $('#sodienthoai').val();
+        var matkhau = $('#matkhau').val();
+        var diachi = $('#diachi').val();
+        $.ajax({
+            url: "/QLKhachHang/ThemKH",
+            type: "POST",
+            data: {
+                ten: ten,
+                ngaysinh: ngaysinh,
+                cc: cancuoc,
+                sdt: sdt,
+                password: matkhau,
+                diachi: diachi,
+                returnUrl: url
+            },
+            dataType: "json",
+        });
+        alert("Thêm thành công khách hàng");
+        window.location.reload();
+    }
+</script>
+
+
+

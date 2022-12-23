@@ -1,0 +1,264 @@
+﻿
+@{
+    decimal sum = 0;
+    ViewBag.Title = "Payment";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using Web.Models;
+@model Cart
+
+<div class="main-container container">
+    <ul class="breadcrumb">
+        <li><a href="#"><i class="fa fa-home"></i></a></li>
+        <li><a href="#">Giỏ hàng</a></li>
+    </ul>
+
+    <div class="row">
+        <!--Middle Part Start-->
+        <div id="content" class="col-sm-12">
+            <h2 class="title">Giỏ hàng</h2>
+
+            <div class="table-responsive form-group">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <td class="text-center">Ảnh</td>
+                            <td class="text-left">Tên Sản Phẩm</td>
+                            <td class="text-left">Model</td>
+                            <td class="text-left">Số lượng</td>
+                            <td class="text-right">Giá</td>
+                            <td class="text-right">Tổng</td>
+                            <td class="text-right"></td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @using (var mol = new Model1())
+                        {
+                            if (Model != null)
+                            {
+
+
+                                var list = (from s in Model.Lines
+                                            join anh in mol.PictureProducts on s.Sanpham.MaSP equals anh.MaSP
+                                            select new
+                                            {
+                                                anh.Anh1,
+                                                anh.Anh2,
+                                                anh.Anh3,
+                                                anh.Anh4,
+                                                anh.Anh5,
+                                                s
+                                            }).ToList();
+                                foreach (var it in list)
+                                {
+                                    var gia = it.s.Sanpham.Gia;
+                                    var soluong = it.s.Soluong;
+                                    var tong = gia * soluong;
+                                    sum += tong;
+                                    <tr>
+                                        <td class="text-center"><a href="/Produce/DetalProduct?id=@it.s.Sanpham.MaSP"><img src="~/Picture/@it.Anh1" alt="Aspire Ultrabook Laptop" title="Aspire Ultrabook Laptop" class="img-thumbnail" style="height:80px; width:80px;" /></a></td>
+                                        <td class="text-left">
+                                            <a href="/Produce/DetalProduct?id=@it.s.Sanpham.MaSP">@it.s.Sanpham.TenSP</a><br />
+                                        </td>
+                                        <td class="text-left">Pt 001</td>
+                                        <td class="text-left" width="200px">
+                                            <div class="input-group btn-block quantity">
+                                                <span class="input-group-btn">
+                                                    <button type="button" class="btn">+</button>
+                                                </span>
+                                                <input type="text" name="quantity" value="@it.s.Soluong" class="form-control" />
+                                                <span class="input-group-btn">
+                                                    <button type="button" class="btn">-</button>
+                                                </span>
+                                                @*<span class="input-group-btn">
+                                    <button type="submit" data-toggle="tooltip" title="Update" class="btn btn-primary"><i class="fa fa-clone"></i></button>
+                                    <button type="button" data-toggle="tooltip" title="Remove" class="btn btn-danger" onClick=""><i class="fa fa-times-circle"></i></button>
+                                </span>*@
+                                            </div>
+                                        </td>
+                                        <td class="text-right">@String.Format("{0:0,0 VND}", gia).Replace(",", ".")</td>
+                                        <td class="text-right">@String.Format("{0:0,0 VND}", tong).Replace(",", ".")</td>
+                                        <td class="text-right">
+                                            <span class="input-group-btn">
+                                                <button type="button" data-toggle="tooltip" title="Remove" class="btn btn-danger" onClick="remove.removeProduct('@it.s.Sanpham.MaSP', '@Request.RawUrl')"><i class="fa fa-times-circle"></i></button>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        }
+
+                            </tbody>
+                </table>
+            </div>
+            <p>Bạn có mã giảm giá hoặc điểm thưởng muốn sử dụng hoặc muốn ước tính chi phí đơn hàng của mình.</p>
+            <div class="panel-group" id="accordion">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a href="#collapse-coupon" class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" aria-expanded="true">
+                                Sử dụng mã Coupon
+                                <i class="fa fa-caret-down"></i>
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapse-coupon" class="panel-collapse collapse in" aria-expanded="true">
+                        <div class="panel-body">
+                            <label class="col-sm-2 control-label" for="input-coupon">Nhập mã Coupon</label>
+                            <div class="input-group">
+                                <input type="text" name="coupon" value="" placeholder="Nhập mã coupon tại đây" id="input-coupon" class="form-control">
+                                <span class="input-group-btn"><input type="button" value="Áp dụng" id="button-coupon" data-loading-text="Loading..." class="btn btn-primary"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a href="#collapse-shipping" class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" aria-expanded="false">
+                                Giá vận chuyển
+
+                                <i class="fa fa-caret-down"></i>
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapse-shipping" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
+                        <div class="panel-body">
+                            <p>Chọn địa chỉ của bạn</p>
+                            <div class="form-horizontal">
+                                <div class="form-group required">
+                                    <label class="col-sm-2 control-label" for="input-country">Tỉnh</label>
+                                    <div class="col-sm-10">
+                                        <select name="country_id" onchange="handleChangePrice(event, @sum)" id="input-country" class="form-control">
+                                            <option value=""> --- Please Select --- </option>
+                                            <option value="20000">Hà Nội</option>
+                                            <option value="15000">Thành phố HCM</option>
+                                            <option value="25000">Hà Nam</option>
+                                            <option value="30000">Đà Nẵng</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group required">
+                                    <label class="col-sm-2 control-label" for="input-postcode">Địa chỉ cụ thể</label>
+                                    <div class="col-sm-10"><input type="text" name="postcode" value="" placeholder="Post Code" id="input-postcode" class="form-control"></div>
+                                </div>
+                                <button type="button" id="button-quote" data-loading-text="Loading..." class="btn btn-primary">Áp dụng</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a href="#collapse-voucher" data-toggle="collapse" data-parent="#accordion" class="accordion-toggle collapsed" aria-expanded="false">
+                                Sử dụng mã giảm giá
+                                <i class="fa fa-caret-down"></i>
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapse-voucher" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
+                        <div class="panel-body">
+                            <label class="col-sm-2 control-label" for="input-voucher">Nhập mã tại đây</label>
+                            <div class="input-group">
+                                <input type="text" name="voucher" value="" placeholder="Nhập mã tại đây" id="input-voucher" class="form-control">
+                                <span class="input-group-btn"><input type="submit" value="Xác nhận" id="button-voucher" data-loading-text="Loading..." class="btn btn-primary"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="row">
+                <div class="col-sm-4 col-sm-offset-8">
+                    <table class="table table-bordered">
+                        <tbody>
+                            <tr>
+                                <td class="text-right">
+                                    <strong>Giá đơn:</strong>
+                                </td>
+                                <td class="text-right">@String.Format("{0:0,0 VND}", sum).Replace(",", ".")</td>
+                            </tr>
+                            <tr>
+                                <td class="text-right">
+                                    <strong>Giá ship:</strong>
+                                </td>
+                                <td class="text-right price_1"></td>
+                            </tr>
+                            <tr>
+                                <td class="text-right">
+                                    <strong>Mã giảm giá:</strong>
+                                </td>
+                                <td class="text-right">0 VND</td>
+                            </tr>
+                            <tr>
+                                <td class="text-right">
+                                    <strong>VAT (20%):</strong>
+                                </td>
+                                <td class="text-right">0 VND</td>
+                            </tr>
+                            <tr>
+                                <td class="text-right ">
+                                    <strong>Tổng giá trị:</strong>
+                                </td>
+                                <td class="text-right total_1">@String.Format("{0:0,0 VND}", sum).Replace(",", ".")</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title"><i class="fa fa-pencil"></i> Để lại ghi chú cho shop</h4>
+                </div>
+                <div class="panel-body">
+                    <textarea rows="4" class="form-control" id="confirm_comment" name="comments"></textarea>
+                    <br>
+                    <label class="control-label" for="confirm_agree">
+                        <input type="checkbox" checked="checked" value="1" required="" class="validate required" id="confirm_agree" name="confirm agree">
+                        <span>Tôi đồng ý với các điều khoản <a class="agree" href="#"><b> điều khoản &amp; </b></a></span>
+                    </label>
+                    <div class="buttons">
+                        <div class="pull-right">
+                            <input type="button" class="btn btn-primary" id="button-confirm" value="Confirm Order" onclick="thanhtoan()">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script>
+    
+    var giaship;
+    var number;
+    function thanhtoan() {
+        var ghichu = $('#confirm_comment').val();
+        $.ajax({
+            url: "/Cart/Checkout",
+            type: "POST",
+            data: {
+                tong: number,
+                ghichu: ghichu
+            },
+            dataType: "json",
+            success: function (data) {
+                window.location.href = data;
+            }
+        });
+
+    }
+    const handleChangePrice = (e, s) => {
+        $(".price_1").html(e.target.value)
+        number = Number(e.target.value) + Number(s);
+        var t = new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'VND' }).format(number)
+        $(".total_1").html(t);
+        console.log(t);
+
+    }
+</script>
+
+

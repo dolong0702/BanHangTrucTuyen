@@ -1,0 +1,346 @@
+﻿@using Web.Models
+@model Web.Models.SanPham
+@using System.Globalization;
+@{
+    ViewBag.Title = "DetalProduct";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    string id = ViewBag.id_sp;
+}
+
+<!-- Main Container  -->
+<div class="main-container container">
+    <ul class="breadcrumb">
+        <li><a href="#"><i class="fa fa-home"></i></a></li>
+        <li><a href="/Produce/List/@Model.MaDM">@ViewBag.danhmuc</a></li>
+        <li><a href="/Produce/DetalProduct/@Model.MaSP">@Model.TenSP</a></li>
+
+    </ul>
+
+    <div class="row">
+
+        <!--Left Part Start -->
+        <aside class="col-sm-4 col-md-3 content-aside" id="column-left">
+            @Html.Action("Cart")
+            @*@Html.Action("sanphamvuaxem")*@
+
+        </aside>
+        <!--Left Part End -->
+        <!--Middle Part Start-->
+        @using (var mol = new Model1())
+        {
+            var it = (from anh in mol.PictureProducts
+                      join s in mol.SanPhams on anh.MaSP equals s.MaSP
+                      where s.MaSP == id
+                      select new
+                      {
+                          anh.Anh1,
+                          anh.Anh2,
+                          anh.Anh3,
+                          anh.Anh4,
+                          anh.Anh5,
+
+                      }).FirstOrDefault();
+
+            var mota = (from a in mol.SP_ThuocTinh
+                        join b in mol.ChiTietThuocTinhs on a.MaChiTiet equals b.MaChiTiet
+                        where a.MaSP == id
+                        select new
+                        {
+                            b.Chitiet,
+                        }
+                        ).ToArray();
+
+            var spdgbro = (from s in mol.SP_Danhgia
+                           where s.MaSP == id
+                           select s).ToList();
+
+            <div id="content" class="col-md-9 col-sm-8">
+                <div class="product-view row">
+                    <div class="left-content-product">
+                        <div class="content-product-left class-honizol col-md-5 col-sm-12 col-xs-12">
+                            <div class="large-image  ">
+                                <img itemprop="image" class="product-image-zoom" src="/Picture/@it.Anh1" data-zoom-image="/Picture/@it.Anh1" title="Chicken swinesha" alt="Chicken swinesha">
+                            </div>
+                            <div id="thumb-slider" class="yt-content-slider full_slider owl-drag" data-rtl="yes" data-autoplay="no" data-autoheight="no" data-delay="4" data-speed="0.6" data-margin="10" data-items_column0="4" data-items_column1="3" data-items_column2="4" data-items_column3="1" data-items_column4="1" data-arrows="yes" data-pagination="no" data-lazyload="yes" data-loop="no" data-hoverpause="yes">
+                                <a data-index="0" class="img thumbnail " data-image="/Picture/@it.Anh1" title="Chicken swinesha">
+                                    <img src="/Picture/@it.Anh1" title="Chicken swinesha" alt="Chicken swinesha">
+                                </a>
+                                <a data-index="1" class="img thumbnail " data-image="/Picture/@it.Anh2" title="Chicken swinesha">
+                                    <img src="/Picture/@it.Anh2" title="Chicken swinesha" alt="Chicken swinesha">
+                                </a>
+                                <a data-index="2" class="img thumbnail " data-image="/Picture/@it.Anh3" title="Chicken swinesha">
+                                    <img src="/Picture/@it.Anh3" title="Chicken swinesha" alt="Chicken swinesha">
+                                </a>
+                                <a data-index="3" class="img thumbnail " data-image="/Picture/@it.Anh4" title="Chicken swinesha">
+                                    <img src="/Picture/@it.Anh4" title="Chicken swinesha" alt="Chicken swinesha">
+                                </a>
+                                <a data-index="4" class="img thumbnail " data-image="/Picture/@it.Anh5" title="Chicken swinesha">
+                                    <img src="/Picture/@it.Anh5" title="Chicken swinesha" alt="Chicken swinesha">
+                                </a>
+                            </div>
+
+                        </div>
+
+                        <div class="content-product-right col-md-7 col-sm-12 col-xs-12">
+
+                            <div class="title-product">
+                                <h1>@ViewBag.ten</h1>
+                            </div>
+                            <!-- Review ---->
+                            @*<div class="box-review form-group">
+
+                                    <div class="ratings">
+                                        <div class="rating-box">
+                                            <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-1x"></i></span>
+                                            <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-1x"></i></span>
+                                            <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-1x"></i></span>
+                                            <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-1x"></i></span>
+                                            <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-1x"></i></span>
+                                        </div>
+                                    </div>
+
+                                    <a class="reviews_button" href="" onclick="$('a[href=\'#tab-review\']').trigger('click'); return false;">0 reviews</a>	|
+                                    <a class="write_review_button" href="" onclick="$('a[href=\'#tab-review\']').trigger('click'); return false;">Write a review</a>
+                                </div>*@
+                            <ul>
+                                <li><b>Cấu Hình: </b><span>@mota[0].Chitiet</span></li>
+                                <li><b>Trọng Lượng: </b><span>@mota[1].Chitiet</span></li>
+                                <li><b>RAM: </b><span>@mota[2].Chitiet</span></li>
+                                <li><b>Công Nghệ: </b><span>@mota[3].Chitiet</span></li>
+                                <li><b>Công Suất: </b><span>@mota[4].Chitiet</span></li>
+                            </ul>
+                            <div class="product-label form-group">
+                                <div class="product_page_price price" itemprop="offerDetails" itemscope="" itemtype="http://data-vocabulary.org/Offer">
+                                    <span class="price-new" itemprop="price">@String.Format("{0:0,0 VND}", Model.Gia).Replace(",", ".")</span>
+                                </div>
+                                <div class="stock"><span>Trạng thái:</span> <span class="status-stock">@Model.Trangthai</span></div>
+                            </div>
+
+                            <div id="product">
+                                <div class="form-group box-info-product">
+                                    <div class="option quantity">
+                                        <div class="input-group quantity-control" unselectable="on" style="-webkit-user-select: none;">
+                                            <label>Số lượng</label>
+                                            <input class="form-control" type="text" name="quantity" id="soluong1" value="1">
+                                            <input type="hidden" name="product_id" value="50">
+                                            <span class="input-group-addon product_quantity_down">−</span>
+                                            <span class="input-group-addon product_quantity_up">+</span>
+                                        </div>
+                                    </div>
+                                    <div class="cart">
+                                        <input type="button" data-toggle="tooltip" title="" value="Thêm giỏ hàng" data-loading-text="Loading..." id="button-cart" class="btn btn-mega btn-lg" onclick="themgio('@ViewBag.id_sp','@Request.RawUrl')" data-original-title="Add to Cart">
+                                    </div>
+                                    <div class="add-to-links wish_comp">
+                                        <ul class="blank list-inline">
+                                            <li class="wishlist">
+                                                <a class="icon" data-toggle="tooltip" title=""
+                                                   onclick="wishlist.add('50');" data-original-title="Add to Wish List">
+                                                    <i class="fa fa-heart"></i>
+                                                </a>
+                                            </li>
+                                            <li class="compare">
+                                                <a class="icon" data-toggle="tooltip" title=""
+                                                   onclick="compare.add('50');" data-original-title="Compare this Product">
+                                                    <i class="fa fa-exchange"></i>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                            <!-- end box info product -->
+
+                        </div>
+
+                    </div>
+                </div>
+                <!-- Product Tabs -->
+                <!-- //Product Tabs -->
+                <!-- Related Products -->
+                <!-- end Related  Products-->
+            </div>
+
+
+            <div class="col-md-9 col-sm-8">
+                <div class="product__details__tab">
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" data-toggle="tab" href="#tabs-1" role="tab"
+                               aria-selected="true">Thông tin chi tiết</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#tabs-2" role="tab"
+                               aria-selected="false">Đánh giá sản phẩm</a>
+                        </li>
+
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="tabs-1" role="tabpanel">
+                            <div class="product__details__tab__desc">
+
+                                <p class="user-motasp">@ViewBag.mota</p>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="tabs-2" role="tabpanel">
+                            <div class="product__details__tab__desc">
+                                <h5 id="user-ct">Comment</h5>
+
+
+                                @using (var con3 = new Model1())
+                                {
+                                    var spdg = (from a in con3.SP_Danhgia
+                                                join kh in con3.KhachHangs on a.MaKH equals kh.MaKH
+                                                where a.MaSP == id
+                                                select new
+                                                {
+                                                    a.MaSP,
+                                                    kh.TenKH,
+                                                    a.noidung_danhgia,
+                                                    a.NgayDanhgia,
+
+                                                }).ToList();
+                                    foreach (var inner in spdg)
+                                    {
+
+                                        <div class="user-cmtsp"><i class="bi bi-person-lines-fill"></i> <span class="user-cmtsp-name">@inner.TenKH</span> <span class="user-cmtsp-time">@inner.NgayDanhgia</span></div>
+
+                                        <div class="alert alert-success user-cmt-contentsp" role="alert"> <i class="bi bi-chat-left-fill"></i> @inner.noidung_danhgia</div>
+
+
+                                    }
+
+
+                                    <i class="bi bi-chat-left-fill"></i>
+                                    <div class="bs-example" data-example-id="textarea-form-control">
+                                        <form action="/Produce/Binhluan" method="get">
+                                            <input value="@id" type="hidden" name="id" />
+                                            <input value="@Request.RawUrl" type="hidden" name="returnUrl" />
+                                            @{ if (ViewBag.cm != null)
+                                                {
+                                                    <p style="color:red">@ViewBag.cm</p>
+                                                }}
+                                            <textarea class="form-control" rows="3" placeholder="Viết bình luận  . . . . ." name="comment"></textarea>
+                                            <input type="submit" value="Bình luận" class="pull-right" />
+                                        </form>
+                                    </div>
+
+
+
+
+                                }
+
+
+
+
+                                @*<ul>
+                            <li><i class="ace-icon fa fa-users"><span>Nguyễn Duy Trinh</span> </i></li>
+                            <li>
+                                <i class="ace-icon fa fa-comment"></i> <span>Rất tốt </span>
+                            </li>
+                        </ul>*@
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        }
+
+    </div>
+
+    
+
+
+    
+    <div class="related titleLine products-list grid module ">
+        <h3 class="modtitle">Sản phẩm tương tự  </h3>
+        <div class="releate-products yt-content-slider products-list" data-rtl="no" data-loop="yes" data-autoplay="no" data-autoheight="no" data-autowidth="no" data-delay="4" data-speed="0.6" data-margin="30" data-items_column0="5" data-items_column1="3" data-items_column2="3" data-items_column3="2" data-items_column4="1" data-arrows="yes" data-pagination="no" data-lazyload="yes" data-hoverpause="yes">
+            @using (var con1 = new Model1())
+            {
+                var sp = con1.SanPhams.Find(id);
+
+                var ds = (from s in con1.SanPhams
+                          join anh in con1.PictureProducts on s.MaSP equals anh.MaSP
+                          where anh.Anh1 != null && sp.TenSP.Contains(sp.TenSP) && s.MaDM == sp.MaDM
+                          select new
+                          {
+                              s.MaSP,
+                              s.TenSP,
+                              s.Gia,
+                              anh.Anh1,
+                              anh.Anh2,
+                          }
+                        ).ToList().Distinct();
+                foreach (var it in ds)
+                {
+                    <div class="item">
+                        <div class="item-inner product-layout transition product-grid">
+                            <div class="product-item-container">
+                                <div class="left-block">
+                                    <div class="product-image-container second_img">
+                                        <a href="/Produce/DetalProduct/@it.MaSP" target="_self" title="Pastrami bacon">
+                                            <img src="/Picture/@it.Anh1" class="img-1 img-responsive" alt="Pastrami bacon">
+                                            <img src="/Picture/@it.Anh2" class="img-2 img-responsive" alt="Pastrami bacon">
+                                        </a>
+                                    </div>
+
+                                    <div class="button-group so-quickview cartinfo--left">
+                                        <button type="button" class="addToCart btn-button" title="Add to cart" onclick="addto.add('@it.MaSP', '@Request.RawUrl');">
+                                            <i class="fa fa-shopping-basket"></i>
+                                            <span>Add to cart </span>
+                                        </button>
+                                        <button type="button" class="wishlist btn-button" title="Add to Wish List" onclick="wishlist.add('60');">
+                                            <i class="fa fa-heart"></i><span>Add to Wish List</span>
+                                        </button>
+                                        <button type="button" class="compare btn-button" title="Compare this Product " onclick="compare.add('60');">
+                                            <i class="fa fa-refresh"></i><span>Compare this Product</span>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="right-block">
+                                    <div class="caption">
+
+                                        @*<div class="rating">
+                                            <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i></span>
+                                            <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i></span>
+                                            <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i></span>
+                                            <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-2x"></i></span>
+                                            <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-2x"></i></span>
+                                        </div>*@
+                                        <h4><a href="/Produce/DetalProduct/@it.MaSP" title="Pastrami bacon" target="_self">@it.TenSP</a></h4>
+                                        <div class="price">@String.Format("{0:0,0 VND}", it.Gia).Replace(",", ".")</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            </div>
+    </div>
+
+</div>
+<!--Middle Part End-->
+<!-- //Main Container -->
+<script>
+    function themgio(product_id, url) {
+                var a = $('#soluong1').val();
+        //addProductNotice('Product added to Wishlist', '<img src="image/demo/shop/product/e11.jpg" alt="">', '<h3>You must <a href="#">login</a>  to save <a href="#">Apple Cinema 30"</a> to your <a href="#">wish list</a>!</h3>', 'success');
+        $.ajax({
+                url: "/Cart/Add",
+            type: "POST",
+            data: {
+                    Masp: product_id,
+                returnUrl: url,
+                soluong: a
+            },
+            dataType: "json",
+            success: function () {
+                        alert("thêm sản phẩm thành công");
+                    }
+                });
+            }
+</script>

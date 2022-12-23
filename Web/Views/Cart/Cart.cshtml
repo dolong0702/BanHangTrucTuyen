@@ -1,0 +1,149 @@
+﻿
+@{
+    decimal sum = 0;
+    ViewBag.Title = "Cart";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using Web.Models;
+@model Cart
+
+<!-- Main Container  -->
+<div class="main-container container">
+    <ul class="breadcrumb">
+        <li><a href="#"><i class="fa fa-home"></i></a></li>
+        <li><a href="#">Giỏ hàng</a></li>
+    </ul>
+
+    <div class="row">
+        <!--Middle Part Start-->
+        <div id="content" class="col-sm-12">
+            <h2 class="title">Giỏ hàng</h2>
+            <div class="table-responsive form-group">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <td class="text-center">Ảnh</td>
+                            <td class="text-left">Tên Sản Phẩm</td>
+                            <td class="text-left">Model</td>
+                            <td class="text-left">Số lượng</td>
+                            <td class="text-right">Giá</td>
+                            <td class="text-right">Tổng</td>
+                            <td class="text-right">Xóa</td>
+                            <td class="text-right">Cập nhập</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @using (var mol = new Model1())
+                        {
+                            if (Model != null)
+                            {
+
+
+                                var list = (from s in Model.Lines
+                                            join anh in mol.PictureProducts on s.Sanpham.MaSP equals anh.MaSP
+                                            select new
+                                            {
+                                                anh.Anh1,
+                                                anh.Anh2,
+                                                anh.Anh3,
+                                                anh.Anh4,
+                                                anh.Anh5,
+                                                s
+                                            }).ToList();
+                                foreach (var it in list)
+                                {
+                                    var gia = it.s.Sanpham.Gia;
+                                    var soluong = it.s.Soluong;
+                                    var tong = gia * soluong;
+                                    sum += tong;
+                                    <tr>
+                                        <td class="text-center"><a href="/Produce/DetalProduct?id=@it.s.Sanpham.MaSP"><img src="~/Picture/@it.Anh1" alt="Aspire Ultrabook Laptop" title="Aspire Ultrabook Laptop" class="img-thumbnail" style="height:80px; width:80px;" /></a></td>
+                                        <td class="text-left">
+                                            <a href="/Produce/DetalProduct?id=@it.s.Sanpham.MaSP">@it.s.Sanpham.TenSP</a><br />
+                                        </td>
+                                        <td class="text-left">Pt 001</td>
+                                        <td class="text-left" width="200px">
+                                            <div class="option quantity">
+                                                <div class="input-group quantity-control" unselectable="on" style="-webkit-user-select: none;">
+                                                    <input class="form-control" type="text" name="quantity" id="soluong1" value="@it.s.Soluong">
+                                                    <input type="hidden" name="product_id" value="50">
+                                                    <span class="input-group-addon product_quantity_down">−</span>
+                                                    <span class="input-group-addon product_quantity_up">+</span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="text-right">@String.Format("{0:0,0 VND}", gia).Replace(",", ".")</td>
+                                        <td class="text-right">@String.Format("{0:0,0 VND}", tong).Replace(",", ".")</td>
+                                        <td class="text-right">
+                                            <span class="input-group-btn">
+                                                <button type="button" data-toggle="tooltip" title="Remove" class="btn btn-danger" onClick="remove.removeProduct('@it.s.Sanpham.MaSP', '@Request.RawUrl')"><i class="fa fa-times-circle"></i></button>
+                                            </span>
+                                        </td>
+                                        <td class="text-right">
+                                            <span class="input-group-btn">
+                                                <button type="button" title="Update" class="btn btn-default" onClick="capnhap('@it.s.Sanpham.MaSP','@Request.RawUrl')">Cập nhập</button>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                }
+
+
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+
+            @if (Model != null)
+            {<div class="row">
+                    <div class="col-sm-4 col-sm-offset-8">
+                        <table class="table table-bordered">
+                            <tbody>
+                                <tr>
+                                    <td class="text-right">
+                                        <strong>Tổng giá trị giỏ hàng:</strong>
+                                    </td>
+                                    <td class="text-right">@String.Format("{0:0,0 VND}", sum).Replace(",", ".")</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>}
+
+
+        <div class="buttons">
+            <div class="pull-left"><a href="/Produce/List" class="btn btn-primary">Tiếp tục mua sắm</a></div>
+            @if (Model != null)
+            {
+                <div class="pull-right"><a href="/Cart/Payment" class="btn btn-primary">Thanh toán</a></div>
+            }
+
+        </div>
+
+            <!--Middle Part End -->
+        </div>
+    </div>
+</div>
+<!-- //Main Container -->
+<script>
+    function capnhap(product_id, url) {
+        var a = $('#soluong1').val();
+        //addProductNotice('Product added to Wishlist', '<img src="image/demo/shop/product/e11.jpg" alt="">', '<h3>You must <a href="#">login</a>  to save <a href="#">Apple Cinema 30"</a> to your <a href="#">wish list</a>!</h3>', 'success');
+        $.ajax({
+            url: "/Cart/Update_Quantity_Cart",
+            type: "POST",
+            data: {
+                ma: product_id,
+                url: url,
+                soluong: a
+            },
+            dataType: "json",
+            success: function () {
+                alert("Cập nhập sản phẩm thành công");
+            },
+        });
+        window.location.reload();
+    }
+</script>

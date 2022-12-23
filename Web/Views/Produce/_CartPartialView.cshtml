@@ -1,0 +1,28 @@
+﻿@model List<Web.Models.Danhmuc>
+<div class="module category-style">
+    <h3 class="modtitle">Danh mục</h3>
+    <div class="modcontent">
+        <div class="box-category">
+            <ul id="cat_accordion" class="list-group">
+                <a href="/Produce/List/all" class="cutom-parent">Tất cả sản phẩm</a>
+                @foreach (var it in Model)
+                {
+                    <li class="hadchild">
+                        <a href="/Produce/List/@it.MaDM" class="cutom-parent">@it.TenDM</a>
+                        @*<span class="button-view  fa fa-plus-square-o"></span>*@
+                        @*<ul style="display: block;">
+                                <li><a href="category.html">Máy giặt</a></li>
+                                <li><a href="category.html">Máy giặt</a></li>
+                            </ul>*@
+                    </li>
+
+                }
+            </ul>
+        </div>
+
+
+    </div>
+</div>
+
+
+

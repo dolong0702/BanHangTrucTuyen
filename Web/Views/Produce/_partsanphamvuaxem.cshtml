@@ -1,0 +1,59 @@
+﻿
+@using Web.Models
+@model List<Web.Models.SanPham>
+<div class="module product-simple">
+    <h3 class="modtitle">
+        <span>Sản phẩm vừa xem</span>
+    </h3>
+    <div class="modcontent">
+        <div class="extraslider">
+            <!-- Begin extraslider-inner -->
+            <div class=" extraslider-inner">
+                <div class="item ">
+                    @if (Model != null)
+                    {
+                        foreach (var it in Model)
+                        {
+                            var mol = new Model1();
+                            var anh = mol.PictureProducts.Where(x => x.MaSP == it.MaSP).FirstOrDefault();
+                            <div class="product-layout item-inner style1 ">
+                                <div class="item-image">
+                                    <div class="item-img-info">
+                                        <a href="/Produce/DetalProduct/@it.MaSP" target="_self" title="Mandouille short ">
+                                            <img src="~/Picture/@anh.Anh1" alt="Mandouille short">
+                                        </a>
+                                    </div>
+
+                                </div>
+                                <div class="item-info">
+                                    <div class="item-title">
+                                        <a href="/Produce/DetalProduct/@it." target="_self" title="Mandouille short">@it.TenSP</a>
+                                    </div>
+                                    @*<div class="rating">
+                                            <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i></span>
+                                            <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i></span>
+                                            <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i></span>
+                                            <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i></span>
+                                            <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i></span>
+                                        </div>*@
+                                    <div class="content_price price">
+                                        <span class="price-new product-price">@String.Format("{0:0,0 VND}", it.Gia).Replace(",", ".") </span>&nbsp;&nbsp;
+
+                                        @*<span class="price-old">$76.00 </span>&nbsp;*@
+
+                                    </div>
+                                </div>
+                                <!-- End item-info -->
+                                <!-- End item-wrap-inner -->
+                            </div>
+                        }
+                    }
+
+                    <!-- End item-wrap -->
+                </div>
+
+            </div>
+            <!--End extraslider-inner -->
+        </div>
+    </div>
+</div>

@@ -1,0 +1,142 @@
+﻿
+@{
+    ViewBag.Title = "DetalProduct";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+@using Web.Models;
+
+
+<main class="page-content">
+    <!--breadcrumb-->
+    <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
+        <div class="ps-3">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0 p-0">
+                    <li class="breadcrumb-item">
+                        <a href="javascript:;"><i class="bx bx-home-alt"></i></a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">Sửa thông tin sản phẩm</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+    <!--end breadcrumb-->
+
+    <div class="row">
+        <div class="col-lg-12 mx-auto">
+            <div class="card">
+                <div class="card-header py-3 bg-transparent">
+                    <div class="d-sm-flex align-items-center">
+                        <h5 class="mb-2 mb-sm-0">Thông tin</h5>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-12 col-lg-8">
+                            <div class="card shadow-none bg-light border">
+                                <div class="card-body">
+                                    <form class="row g-3">
+                                        <div class="col-12">
+                                            <label class="form-label">Tên sản phẩm</label>
+                                            <input type="text" class="form-control" placeholder="Product title" value="@ViewBag.sp.TenSP">
+                                        </div>
+                                        <div class="col-12">
+                                            <label class="form-label">Hãng</label>
+                                            <input type="text" class="form-control" placeholder="SKU">
+                                        </div>
+                                        <div class="col-12">
+                                            <label class="form-label">Màu sắc</label>
+                                            <input type="text" class="form-control" placeholder="Color">
+                                        </div>
+                                        <div class="col-12">
+                                            <label class="form-label">Hình ảnh</label>
+                                            <input class="form-control" type="file">
+                                        </div>
+                                        <div class="col-12">
+                                            <label class="form-label">Mô tả</label>
+                                            <textarea class="form-control" placeholder="Full description" rows="4" cols="4"></textarea>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-lg-4">
+                            <div class="card shadow-none bg-light border">
+                                <div class="card-body">
+                                    <div class="row g-3">
+                                        <div class="col-12">
+                                            <label class="form-label">Giá</label>
+                                            <input type="text" class="form-control" placeholder="Price">
+                                        </div>
+                                        <div class="col-12">
+                                            <label class="form-label">Tráng thái</label>
+                                            <select class="form-select">
+                                                <option>Còn hàng</option>
+                                                <option>Hết hàng</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-12">
+                                            <h5>Danh mục</h5>
+                                            <div class="category-list">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value="" id="Jeans">
+                                                    <label class="form-check-label" for="Jeans">
+                                                        Jeans
+                                                    </label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value="" id="FormalShirts">
+                                                    <label class="form-check-label" for="FormalShirts">
+                                                        Formal Shirts
+                                                    </label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value="" id="WomenShirts">
+                                                    <label class="form-check-label" for="WomenShirts">
+                                                        Women Shirts
+                                                    </label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value="" id="Electronics">
+                                                    <label class="form-check-label" for="Electronics">
+                                                        Electronics
+                                                    </label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value="" id="SportsShoes">
+                                                    <label class="form-check-label" for="SportsShoes">
+                                                        Sports Shoes
+                                                    </label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value="" id="Mobiles">
+                                                    <label class="form-check-label" for="Mobiles">
+                                                        Mobiles
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div><!--end row-->
+                                </div>
+                            </div>
+                        </div>
+                    </div><!--end row-->
+                    <div class="ms-auto">
+                        <button type="button" class="btn btn-primary">Sửa sản phẩm</button>
+                        <button type="button" class="btn btn-primary" onclick="quay_lai_trang_truoc()">Quay lại</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!--end row-->
+
+</main>
+
+<script>
+    function quay_lai_trang_truoc() {
+        location.assign("/Admin/AdminProduct/ShowProduct");
+    }
+</script>
+
